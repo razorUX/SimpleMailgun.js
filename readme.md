@@ -35,6 +35,8 @@ const client = createMailgunClient({
   domain: "mail.example.com",
   apiKey: "FAKE_API_KEY",
 		
+  useEUServer: true // use the mailgun servers hosted in the EU (`api.eu.mailgun.net` domain). Optional, default to false
+  
   debugLogging: true // Optional, default to false
 });
 ```

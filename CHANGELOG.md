@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added 
 ### Fixed
+
+* Sending emails for domains configured to use EU servers (instead of US) fails with an error 401 - Forbidden.
+
 ### Changed
 ### Deprecated
 ### Removed

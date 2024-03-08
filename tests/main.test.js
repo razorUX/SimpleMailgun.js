@@ -23,6 +23,13 @@ const MAILGUN_CONFIG = {
 	debugLogging: true
 }
 
+const MAILGUN_CONFIG_EU = {
+	domain: "mail.example.com",
+	apiKey: "FAKE_API_KEY",
+	useEUServer: true,
+	debugLogging: true
+}
+
 const MESSAGE_PARAMS = {
 	from: "alice@example.com",
 	to: "bob@example.com",
@@ -94,7 +101,7 @@ describe('Test suite', () => {
 			expect(actual).toStrictEqual(expected);
 		});
 		
-		test('should throw if it gets a non-OK HTTP repsonse', async () => {
+		test('should throw if it gets a non-OK HTTP response', async () => {
 			fm.reset();
 			fm.mock('https://api.mailgun.net/v3/mail.example.com/messages', {
 				status: 500,
@@ -107,6 +114,24 @@ describe('Test suite', () => {
 			expect(error).toBeDefined();
 			expect(error.name).toBe('MailgunAPIError');
 			expect(error.message).toBe( "Got non-OK HTTP response 500" );
+		});
+		
+	});
+
+	describe('send message using EU server', () => {
+	  
+		let client;
+	
+	  beforeEach(() => {
+			fm.reset();
+			fm.mock('https://api.eu.mailgun.net/v3/mail.example.com/messages', API_RESPONSES.MESSAGE_SEND_SUCCESS);
+			client = createMailgunClient(MAILGUN_CONFIG_EU);
+		}) 
+	
+		test('should send the right API call to the endpoint', async () => {
+			const expected = API_RESPONSES.MESSAGE_SEND_SUCCESS.body;
+			const actual = await client.sendMessage(MESSAGE_PARAMS);
+			expect(actual).toStrictEqual(expected);
 		});
 		
 	});
