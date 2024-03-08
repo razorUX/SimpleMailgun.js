@@ -40,6 +40,7 @@ function createMailgunClient(options) {
 	const domain = options?.domain || process.env.MAILGUN_DOMAIN;
 	const username = "api";
 	const apiKey = options?.apiKey || process.env.MAILGUN_API_KEY;
+	const useEUServer = options?.useEUServer || false;
 	 
 	_assertTruthy(domain, `Missing Mailgun domain. Set options.domain or the MAILGUN_DOMAIN environment variable. (Got: ${ domain })`);
 	_assertTruthy(apiKey, `Missing Mailgun API key. Set options.apiKey or the MAILGUN_API_KEY environment variable. (Got: ${ apiKey })`);
@@ -99,7 +100,7 @@ function createMailgunClient(options) {
 		},
 
 		_baseUrl() {
-			return `https://api.mailgun.net/v3/${this._domain()}`;
+			return `https://api.${this._useEUServer() ? 'eu.' : ''}mailgun.net/v3/${this._domain()}`;
 		},
 
 		_authHeaders() {
@@ -112,6 +113,10 @@ function createMailgunClient(options) {
 
 		_domain() {
 			return domain;
+		},
+
+		_useEUServer() {
+			return useEUServer;
 		},
 
 		_credentials() {
